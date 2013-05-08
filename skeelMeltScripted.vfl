@@ -1,0 +1,75 @@
+// Author: Skeel Lee
+// Contact: skeel@skeelogy.com
+// Link: http://cg.skeelogy.com/melt-sop-using-vop-vex/
+// Since: 24 Sep 2011
+
+#define VOP_OP
+#define VOP_SOP
+
+#pragma opname skeelMeltScripted
+#pragma oplabel skeelMeltScripted
+#pragma opmininputs 1
+#pragma opmaxinputs 1
+
+#pragma range meltAmount 0 1
+#pragma range spreadAmount 0 10
+#pragma range poolThickness 0 1
+#pragma range noiseAmplitude 0 10
+#pragma range noiseFrequency 0 100
+#pragma range noiseOffset 0 100
+
+#pragma choice pushType "Normals" "Normals"
+#pragma choice pushType "Radial" "Radial"
+
+sop
+skeelMeltScripted(
+    float meltAmount=0; float spreadAmount=1; float poolThickness=0.05; string pushType="Normals";
+    float noiseAmplitude=0; vector noiseFrequency=1; vector noiseOffset=0;
+)
+{
+    //get bounding box min and max
+    vector bboxMin, bboxMax;
+    getbbox(bboxMin, bboxMax);
+
+    //get vertical distance available
+    float vertDist = bboxMax.y - bboxMin.y;
+
+    //move all points down by vertical distance available, modulated by melt amount
+    P.y -= meltAmount * vertDist;
+
+    //handle the points that are below the bbox min
+    if (P.y < bboxMin.y)
+    {
+        float fractionBelowBboxMin = (bboxMin.y-P.y)/(bboxMax.y-bboxMin.y);
+
+        //generate a push vector based on the push type
+        vector pushVector = 0;
+        if (pushType == "Normals")
+        {
+            //generate push vector based on normals
+            vector Nn = normalize(N);
+            pushVector.x = Nn.x;
+            pushVector.z = Nn.z;
+        }
+        else if (pushType == "Radial")
+        {
+            //generate push vector based on direction away from centroid
+            vector centroid = (bboxMax + bboxMin) / 2.0;
+            pushVector = P - centroid;
+            pushVector.y = 0;
+        }
+
+        //push the points outwards, with some noise
+        float n = noiseAmplitude * noise(P * noiseFrequency + noiseOffset);
+        P += ((meltAmount * spreadAmount) + n) * fractionBelowBboxMin * pushVector;
+
+        //set y to be bboxMin.y
+        P.y = bboxMin.y;
+
+        //give the melted points a thickness, modulated using melt amount and dist below bboxMin
+        P.y -= fractionBelowBboxMin * poolThickness;
+    }
+
+    //push all points up to compensate for the pool's downward offset
+    P.y += meltAmount * poolThickness;
+}
