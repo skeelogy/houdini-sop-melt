@@ -1,11 +1,13 @@
 Houdini/SOP/Melt
 ================
 
+### Introduction
+
 An implementation of a melt SOP in Houdini that allows users to melt an object using a 0-1 slider.
 
 [![ScreenShot](http://cg.skeelogy.com/images/houdini-sop-melt-screenshot-youtube.jpg)](http://www.youtube.com/watch?v=EKkzOzK98ag)
 
-The basic idea:
+### How It Works
 
 1. Move the points down proportionally according to the melt amount.
 
@@ -16,4 +18,15 @@ The basic idea:
 
 3. Lastly, we need to give the melted pool a thickness, otherwise all the faces will be at the same level and undesired flickering will occur during shading due to Z-fighting. This is done by moving the points of the pool down proportionally according to how much they are supposed to be below the bounding box. This will cause the object to go below the ground, thus we have to move ALL the points up so that the bottom of the object stays stationary at the same level.
 
-http://cg.skeelogy.com/melt-sop-using-vop-vex/
+### Important Notes
+
+* Only works with polygonal geometries
+
+### Links
+
+[http://cg.skeelogy.com/melt-sop-using-vop-vex/](http://cg.skeelogy.com/melt-sop-using-vop-vex/)
+
+### License
+
+Released under The MIT License (MIT)<br/>
+Copyright (c) 2013 Skeel Lee ([http://cg.skeelogy.com](http://cg.skeelogy.com))
