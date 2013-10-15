@@ -23,8 +23,8 @@
 
 sop
 skeelMeltScripted(
-    float meltAmount=0; float spreadAmount=1; float poolThickness=0.05; string pushType="Normals";
-    float noiseAmplitude=0; vector noiseFrequency=1; vector noiseOffset=0;
+    float meltAmount=0.75; float spreadAmount=1; float poolThickness=0.05; string pushType="Normals";
+    float noiseAmplitude=1; vector noiseFrequency=1; vector noiseOffset=0;
 )
 {
     //get bounding box min and max
