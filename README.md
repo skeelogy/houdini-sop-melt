@@ -70,4 +70,4 @@ If the above steps do not work for any reason (perhaps due to a different versio
 ### License
 
 Released under The MIT License (MIT)<br/>
-Copyright (c) 2013 Skeel Lee ([http://cg.skeelogy.com](http://cg.skeelogy.com))
+Copyright (c) 2011 Skeel Lee ([http://cg.skeelogy.com](http://cg.skeelogy.com))
